@@ -1,7 +1,7 @@
 
 use std;
 use std::num::FromPrimitive;
-use std::c_str::CString;
+use std::ffi::c_str_to_bytes;
 use ffi;
 use {
     FtResult,
@@ -282,8 +282,8 @@ impl Face {
         if family_name_ptr.is_null() {
             None
         } else {
-            let family_name = unsafe { CString::new(family_name_ptr, false) };
-            Some(family_name.as_str().unwrap().to_string())
+            let family_name = unsafe { c_str_to_bytes(&family_name_ptr) };
+            Some(String::from_utf8_lossy(family_name).to_string())
         }
     }
 
@@ -294,8 +294,8 @@ impl Face {
         if style_name_ptr.is_null() {
             None
         } else {
-            let style_name = unsafe { CString::new(style_name_ptr, false) };
-            Some(style_name.as_str().unwrap().to_string())
+            let style_name = unsafe { c_str_to_bytes(&style_name_ptr) };
+            Some(String::from_utf8_lossy(style_name).to_string())
         }
     }
 }
